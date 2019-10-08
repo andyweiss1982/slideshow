@@ -69,3 +69,28 @@ document.querySelector('.material-icons.right').addEventListener('click', functi
   if (newCurrentSlide) newCurrentSlide.classList.add('current')
   if (newNextSlide) newNextSlide.classList.add('next')
 })
+
+function navigateToSlideFromFragment(){
+  if (!window.location.hash) return
+  const slideNum = parseInt(window.location.hash.substring(1))
+  if (isNaN(slideNum)) return
+  const slides = [...document.querySelectorAll('.slide')]
+  const slide = slides[slideNum - 1]
+  if (!slide) return
+  const prevSlide = document.querySelector('.slide.prev')
+  const currentSlide = document.querySelector('.slide.current')
+  const nextSlide = document.querySelector('.slide.next')
+  if (prevSlide) prevSlide.classList.remove('prev')
+  if (currentSlide) currentSlide.classList.remove('current')
+  if (nextSlide) nextSlide.classList.remove('next')
+  const index = slides.indexOf(slide)
+  for (let i = 0; i < index - 1; i ++) slides[i].classList.add('past') 
+  const newPrevSlide = slides[index - 1]
+  const newCurrentSlide = slides[index]
+  const newNextSlide = slides[index + 1]
+  if (newPrevSlide) newPrevSlide.classList.add('prev')
+  if (newCurrentSlide) newCurrentSlide.classList.add('current')
+  if (newNextSlide) newNextSlide.classList.add('next')
+}
+
+navigateToSlideFromFragment()
