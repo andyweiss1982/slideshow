@@ -13,7 +13,8 @@ body {
   transition: all 2s;
   position: absolute;
   top: 5vh;
-  display: none;
+  left: 5vw;
+  display: none
 }
 .slide.current, .slide.next, .slide.future, .slide.prev, .slide.past{
   display: block;
@@ -33,6 +34,19 @@ body {
 .slide.past{
   left: -179vw;
 }
-.current::before{
-  content: "ehllo";
+nav{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+}
+.material-icons.left, .material-icons.right {
+  transition: transform 0.3s;
+  cursor: pointer;
+  user-select: none;
+}
+.material-icons.left:hover, .material-icons.right:hover {
+  transform: scale(1.5);
 }
