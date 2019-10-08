@@ -17,7 +17,8 @@ body {
   display: none
 }
 .slide.current, .slide.next, .slide.future, .slide.prev, .slide.past{
-  display: block;
+  display: grid;
+  place-items: center;
 }
 .slide.current{
   left: 5vw;
