@@ -11,13 +11,13 @@ body {
 }
 .slide {
   width: 90vw;
-  height: 90vh;
+  height: 96vh;
+  top: 2vh;
   padding: 2vmin;
   background-color: white;
   border-radius: 5px;
   transition: all 2s;
   position: absolute;
-  top: 5vh;
   left: 189vw;
   box-shadow: 0 0 10px 3px rgba(0,0,0,0.2);
   display: grid;
@@ -35,18 +35,18 @@ body {
 .slide.past{
   left: -179vw;
 }
-nav{
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-}
 .material-icons.left, .material-icons.right {
   transition: transform 0.3s;
   cursor: pointer;
   user-select: none;
+  position: fixed;
+  top: 50vh;
+}
+.material-icons.left{
+  left: 1vw;
+}
+.material-icons.right{
+  right: 1vw;
 }
 .material-icons.left:hover, .material-icons.right:hover {
   transform: scale(1.5);
