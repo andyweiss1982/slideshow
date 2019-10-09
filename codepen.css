@@ -11,14 +11,22 @@ body {
 
 main#result, aside#editors {
   flex-grow: 1;
+  flex-basis: 0px;
   border: 1px solid black;
+  transition: all 0.1s;
 }
 
 main#result {
   position: relative;
 }
 
-main#result > i#full-screen {
+main#result.hidden {
+  flex-grow: 0;
+  border: 0;
+  height: 0;
+}
+
+i.fullscreen {
   position: absolute;
   top: 0;
   right: 0;
@@ -44,17 +52,9 @@ textarea.editor{
   outline: none;
   padding: 5px;
   border: 0;
-  -webkit-appearance: none;
 }
 
-code#html > textarea.editor::before {
-  content: "<!--HTML-->";
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-code#css > textarea.editor, code#js > textarea.editor {
+code#css:not(.full) > textarea.editor, code#js:not(.full) > textarea.editor {
   border-top: 1px solid black;
 }
 
@@ -64,11 +64,33 @@ aside#editors{
 }
 
 aside#editors.hidden{
+  flex-grow: 0;
+  border: 0;
+  height: 0;
+}
+
+aside#editors.hidden .fullscreen,
+aside#editors code.hidden .fullscreen,
+main#result.hidden .fullscreen {
   display: none;
 }
 
+aside#editors.hidden textarea.editor, aside#editors code.hidden textarea.editor{
+  padding: 0;
+  height: 0;
+  width: 0;
+}
+
 aside#editors code {
+  position: relative;
   flex-grow: 1;
+  flex-basis: 0px;
+}
+
+aside#editors code.hidden{
+  flex-grow: 0;
+  height: 0;
+  border: 0;
 }
 
 @media only screen and (max-width: 700px) {
@@ -80,8 +102,12 @@ aside#editors code {
     border-top: 0;
     border-left: 1px solid black;
   }
-  code#css > textarea.editor, code#js > textarea.editor {
+  code#css:not(.full) > textarea.editor, code#js:not(.full) > textarea.editor {
     border-top: 0;
     border-left: 1px solid black;;
+  }
+
+  code.full > textarea.editor {
+    border-top: 1px solid black;
   }
 }
