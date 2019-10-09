@@ -1,12 +1,14 @@
 * {
   box-sizing: border-box;
 }
+html, body {
+  overflow: hidden;
+}
 body {
   margin: 0;
   width: 100vw;
   height: 100vh;
   background-color: #e2e2e2;
-  overflow: hidden;
   font-family: Arial, Helvetica, sans-serif;
 }
 .slide {
