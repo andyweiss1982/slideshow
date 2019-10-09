@@ -1,7 +1,7 @@
-
 document.addEventListener('DOMContentLoaded', function(){
   const iframe = document.querySelector('main#result > iframe')
-  const viewPage = document.querySelector('main#result > a#view-page')
+  const fullScreen = document.querySelector('main#result > i#full-screen')
+  const editors = document.querySelector('aside#editors')
   const htmlEditor = document.querySelector('code#html > textarea.editor')
   const cssEditor = document.querySelector('code#css > textarea.editor')
   const jsEditor = document.querySelector('code#js > textarea.editor')
@@ -24,13 +24,21 @@ document.addEventListener('DOMContentLoaded', function(){
                     </html>
                     `
     iframe.srcdoc = srcdoc
-    const dataUrl = `data:text/html;base64,${btoa(srcdoc)}`
-    viewPage.href = dataUrl
   }
 
   for (let editor of [htmlEditor, cssEditor, jsEditor]){
     editor.addEventListener('input', populateIframe)
   }
+
+  fullScreen.addEventListener('click', function(){
+    if (editors.classList.contains('hidden')){
+      editors.classList.remove('hidden')
+      fullScreen.textContent = 'fullscreen'
+    }else{
+      editors.classList.add('hidden')
+      fullScreen.textContent = 'fullscreen_exit'
+    }
+  })
 
   populateIframe()
 })

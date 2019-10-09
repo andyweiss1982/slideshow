@@ -9,7 +9,7 @@ body {
   height: 100vh;
 }
 
-main#result, #editors {
+main#result, aside#editors {
   flex-grow: 1;
   border: 1px solid black;
 }
@@ -18,12 +18,11 @@ main#result {
   position: relative;
 }
 
-main#result > a#view-page {
+main#result > i#full-screen {
   position: absolute;
   top: 0;
   right: 0;
-  color: black;
-  text-decoration: none;
+  cursor: pointer;
 }
 
 main#result > iframe {
@@ -32,7 +31,7 @@ main#result > iframe {
   border: 0;
 }
 
-#editors {
+aside#editors {
   border-left: 0;
 }
 
@@ -58,12 +57,16 @@ code#css > textarea.editor, code#js > textarea.editor {
   border-top: 1px solid black;
 }
 
-#editors{
+aside#editors{
   display: flex;
   flex-direction: column;
 }
 
-#editors code {
+aside#editors.hidden{
+  display: none;
+}
+
+aside#editors code {
   flex-grow: 1;
 }
 
@@ -71,7 +74,7 @@ code#css > textarea.editor, code#js > textarea.editor {
   body {
     flex-direction: column;
   }
-  #editors{
+  aside#editors{
     flex-direction: row;
     border-top: 0;
     border-left: 1px solid black;
