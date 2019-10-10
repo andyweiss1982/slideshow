@@ -3,6 +3,7 @@
 }
 html, body {
   overflow: hidden;
+  touch-action: pan-y pinch-zoom; 
 }
 body {
   margin: 0;
