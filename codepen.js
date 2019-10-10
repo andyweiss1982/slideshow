@@ -24,7 +24,10 @@ document.addEventListener('DOMContentLoaded', function(){
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
                         <meta http-equiv="X-UA-Compatible" content="ie=edge">
                         <title>My Code!</title>
-                        <style>${cssEditor.value}</style>
+                        <style>
+                          ${cssEditor.value}
+                          * { touch-action: pan-y; }
+                        </style>
                       </head>
                       <body>
                         ${htmlEditor.value}
