@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function(){
   const main = document.querySelector('main#result')
   const iframe = document.querySelector('main#result > iframe')
-  const mainFullScreen = document.querySelector('main#result > i.fullscreen')
+  const mainFullScreen = document.querySelector('main#result > i.fullscreen-toggle')
   const editors = document.querySelector('aside#editors')
   const html = document.querySelector('code#html')
   const htmlEditor = document.querySelector('code#html > textarea.editor')
@@ -9,9 +9,9 @@ document.addEventListener('DOMContentLoaded', function(){
   const cssEditor = document.querySelector('code#css > textarea.editor')
   const js = document.querySelector('code#js')
   const jsEditor = document.querySelector('code#js > textarea.editor')
-  const htmlFullScreen = document.querySelector('code#html > i.fullscreen')
-  const cssFullScreen = document.querySelector('code#css > i.fullscreen')
-  const jsFullScreen = document.querySelector('code#js > i.fullscreen')
+  const htmlFullScreen = document.querySelector('code#html > i.fullscreen-toggle')
+  const cssFullScreen = document.querySelector('code#css > i.fullscreen-toggle')
+  const jsFullScreen = document.querySelector('code#js > i.fullscreen-toggle')
 
   function populateIframe(){
     // TODO: consider using blob url:
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function(){
       editors.classList.add('hidden')
       mainFullScreen.textContent = 'fullscreen_exit'
     }
-    main.classList.toggle('full')
+    main.classList.toggle('fullscreen')
   })
 
   htmlFullScreen.addEventListener('click', function(){
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function(){
       main.classList.add('hidden')
       htmlFullScreen.textContent = 'fullscreen_exit'
     }
-    html.classList.toggle('full')
+    html.classList.toggle('fullscreen')
     for (let code of [css, js]) code.classList.toggle('hidden')
   })
 
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function(){
       main.classList.add('hidden')
       cssFullScreen.textContent = 'fullscreen_exit'
     }
-    css.classList.toggle('full')
+    css.classList.toggle('fullscreen')
     for (let code of [html, js]) code.classList.toggle('hidden')
   })
 
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function(){
       main.classList.add('hidden')
       jsFullScreen.textContent = 'fullscreen_exit'
     }
-    js.classList.toggle('full')
+    js.classList.toggle('fullscreen')
     for (let code of [html, css]) code.classList.toggle('hidden')
   })
 

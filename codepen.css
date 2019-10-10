@@ -26,7 +26,7 @@ main#result.hidden {
   height: 0;
 }
 
-i.fullscreen {
+i.fullscreen-toggle {
   position: absolute;
   top: 0;
   right: 0;
@@ -54,11 +54,11 @@ textarea.editor{
   border: 0;
 }
 
-code#css:not(.full), code#js:not(.full) {
+code#css:not(.fullscreen), code#js:not(.fullscreen) {
   border-top: 1px solid black;
 }
 
-code.full {
+code.fullscreen {
   border-left: 1px solid black;
 }
 
@@ -73,9 +73,9 @@ aside#editors.hidden{
   height: 0;
 }
 
-aside#editors.hidden .fullscreen,
-aside#editors code.hidden .fullscreen,
-main#result.hidden .fullscreen {
+aside#editors.hidden .fullscreen-toggle,
+aside#editors code.hidden .fullscreen-toggle,
+main#result.hidden .fullscreen-toggle {
   display: none;
 }
 
@@ -106,12 +106,12 @@ aside#editors code.hidden{
     border-top: 0;
     border-left: 1px solid black;
   }
-  code#css:not(.full), code#js:not(.full) {
+  code#css:not(.fullscreen), code#js:not(.fullscreen) {
     border-top: 0;
     border-left: 1px solid black;;
   }
 
-  code.full {
+  code.fullscreen {
     border-top: 1px solid black;
     border-left: 0;
   }
