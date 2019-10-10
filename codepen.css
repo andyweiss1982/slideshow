@@ -13,6 +13,10 @@ main#result, aside#editors {
   flex-grow: 1;
   flex-basis: 0px;
   border: 1px solid black;
+}
+
+main#result, aside#editors, code#html, code#css, code#js,
+code#html > textarea.editor, code#css > textarea.editor, code#js > textarea.editor {
   transition: all 0.1s;
 }
 
@@ -56,6 +60,10 @@ textarea.editor{
 
 code#css:not(.full) > textarea.editor, code#js:not(.full) > textarea.editor {
   border-top: 1px solid black;
+}
+
+code.full > textarea.editor {
+  border-left: 1px solid black;
 }
 
 aside#editors{
@@ -109,5 +117,6 @@ aside#editors code.hidden{
 
   code.full > textarea.editor {
     border-top: 1px solid black;
+    border-left: 0;
   }
 }

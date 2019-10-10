@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', function(){
   const jsFullScreen = document.querySelector('code#js > i.fullscreen')
 
   function populateIframe(){
+    // TODO: consider using blob url:
+    // https://dev.to/pulljosh/how-to-load-html-css-and-js-code-into-an-iframe-2blc
     const srcdoc =  `
                     <!DOCTYPE html>
                     <html>
@@ -37,6 +39,8 @@ document.addEventListener('DOMContentLoaded', function(){
     editor.addEventListener('input', populateIframe)
   }
 
+  // each full screen click hides the other elements,
+  // flexbox takes care of the rest
   mainFullScreen.addEventListener('click', function(){
     if (editors.classList.contains('hidden')){
       editors.classList.remove('hidden')
@@ -84,7 +88,20 @@ document.addEventListener('DOMContentLoaded', function(){
     for (let code of [html, css]) code.classList.toggle('hidden')
   })
 
+  // turn tabs into spaces:
+  // https://stackoverflow.com/questions/6637341/use-tab-to-indent-in-textarea#answer-14166052
+  for (let editor of [htmlEditor, cssEditor, jsEditor]){
+    editor.addEventListener('keydown', function(e){
+      if(e.keyCode == 9 || e.which == 9){
+        e.preventDefault()
+        const spaces = "  "
+        const selection = this.selectionStart
+        this.value  = this.value.substring(0, this.selectionStart)
+                      + spaces +
+                      this.value.substring(this.selectionEnd)
+        this.selectionEnd = selection + spaces.length
+      }
+    })
+  }
   populateIframe()
 })
-
-
