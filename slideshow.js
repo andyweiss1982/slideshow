@@ -84,7 +84,7 @@ function navigateToSlideFromFragment(){
   if (currentSlide) currentSlide.classList.remove('current')
   if (nextSlide) nextSlide.classList.remove('next')
   const index = slides.indexOf(slide)
-  for (let i = 0; i < index - 1; i ++) slides[i].classList.add('past') 
+  for (let i = 0; i < index - 1; i ++) slides[i].classList.add('past')
   const newPrevSlide = slides[index - 1]
   const newCurrentSlide = slides[index]
   const newNextSlide = slides[index + 1]
