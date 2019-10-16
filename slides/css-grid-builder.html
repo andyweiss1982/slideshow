@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>css#grid.builder</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: 'Courier New', Courier, monospace;
+      }
+      section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 10px;
+        background-color: whitesmoke;
+        padding: 10px;
+      }
+      input, select, button, textarea {
+        width: 100%;
+        padding: 5px;
+        border-radius: 3px;
+        border: 1px solid #e2e2e2;
+        margin-top: 3px;
+        font-size: 0.8rem;
+      }
+      textarea {
+        resize: none;
+      }
+      button{
+        font-size: 1rem;
+      }
+      select, button {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-color: white;
+        cursor: pointer;
+      }
+      #buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 10px;
+        padding: 10px;
+        background-color: #dedede;
+      }
+      #controls {
+        border: 1px dashed black;
+        margin-bottom: 10px;
+      }
+      #wrapper {
+        font-size: 0.8rem;
+        background-color: whitesmoke;
+      }
+      #wrapper input, #wrapper select {
+        margin: 5px auto;
+      }
+      pre {
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      const Grid = () => {
+        const newDiv = () => ({
+          gridArea: 'span 1 / span 1',
+          justifySelf: 'normal', alignSelf: 'normal',
+          width: 'auto', height: 'auto'
+        })
+        const [divs, setDivs] = React.useState([])
+        const [width, setWidth] = React.useState('auto')
+        const [height, setHeight] = React.useState('auto')
+        const [gridTemplateAreas, setGridTemplateAreas] = React.useState('')
+        const [gridTemplateColumns, setGridTemplateColumns] = React.useState('repeat(auto-fit, minmax(200px, 1fr))')
+        const [gridTemplateRows, setGridTemplateRows] = React.useState('')
+        const [gridAutoRows, setGridAutoRows] = React.useState('minmax(200px, auto)')
+        const [gridGap, setGridGap] = React.useState('10px')
+        const [justifyContent, setJustifyContent] = React.useState('normal')
+        const [justifyItems, setJustifyItems] = React.useState('normal')
+        const [alignContent, setAlignContent] = React.useState('normal')
+        const [alignItems, setAlignItems] = React.useState('normal')
+        const [exporting, setExporting] = React.useState(false)
+        const [markup, setMarkup] = React.useState('')
+        const updateDiv = (i, name, value) => {
+          const div = divs[i]
+          div[name] = value
+          const newDivs = [...divs]
+          newDivs.splice(i, 1, div)
+          setDivs(newDivs)
+        }
+        const exportMarkup = () => {
+          let wrapperStyles = {
+            width,
+            height,
+            gridTemplateAreas,
+            gridTemplateColumns,
+            gridTemplateRows,
+            gridAutoRows,
+            gridGap,
+            justifyContent,
+            justifyItems,
+            alignContent,
+            alignItems
+          }
+
+          const format = styles => {
+            const withValues = {}
+            for (let style in styles) {
+              if (styles[style]) {
+                withValues[style.split(/(?=[A-Z])/).join('-').toLowerCase()] = styles[style]
+              }
+            }
+            return(
+              Object.entries(withValues).reduce(
+                (styleString, [property, value]) => {
+                 return `${styleString}\n  ${property}: ${value};`;
+                },
+                ''
+              )
+            )
+          }
+          wrapperStyles = `#wrapper{\n  display: grid;${format(wrapperStyles)}\n}`
+          const divStyles = divs.map((div, index) => (
+            `#grid-item-${index}{${format(div)}\n}`
+          )).join('\n\n')
+
+
+          let html = divs.map((div, i) => (
+            `  <div id='grid-item-${i}'></div>`
+          )).join('\n')
+          html = `<div id='wrapper'>\n${html}\n</div>`
+          return `${html}\n\n${wrapperStyles}\n\n${divStyles}`
+        }
+        return(
+          <main>
+            <div id="controls">
+              <section>
+                <aside
+                  style={{
+                    position: 'absolute',
+                    top: '10px',
+                    right: '10px',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => {
+                    setMarkup(exportMarkup())
+                    setExporting(!exporting)
+                  }}
+                >
+                  { exporting ? '✏️' : '👁️' }
+                </aside>
+                {
+                  exporting ? <pre style={{gridColumn: 'span 2'}}>{markup}</pre> :
+                  <React.Fragment>
+                    <div style={{gridColumn: 'span 2'}}>
+                      <span style={{backgroundColor: 'white'}}>
+                        css#grid.builder
+                      </span>
+                    </div>
+                    <div>
+                      <label htmlFor="width">width</label>
+                      <input
+                        id="width"
+                        type="text"
+                        value={width}
+                        onChange={ e => setWidth(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="height">height</label>
+                      <input
+                        id="height"
+                        type="text"
+                        value={height}
+                        onChange={ e => setHeight(e.target.value)}
+                      />
+                    </div>
+                    <div style={{gridColumn: 'span 2'}}>
+                      <label htmlFor="grid-template-areas">
+                        grid-template-areas
+                      </label>
+                      <textarea
+                        id="grid-template-areas"
+                        value={gridTemplateAreas}
+                        onChange={ e => setGridTemplateAreas(e.target.value) }
+                      ></textarea>
+                    </div>
+                    <div>
+                      <label htmlFor="grid-template-columns">grid-template-columns</label>
+                      <input
+                        id="grid-template-columns"
+                        type="text"
+                        value={gridTemplateColumns}
+                        onChange={ e => setGridTemplateColumns(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="grid-template-rows">grid-template-rows</label>
+                      <input
+                        id="grid-template-rows"
+                        type="text"
+                        value={gridTemplateRows}
+                        onChange={ e => setGridTemplateRows(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="grid-auto-rows">grid-auto-rows</label>
+                      <input
+                        id="grid-auto-rows"
+                        type="text"
+                        value={gridAutoRows}
+                        onChange={ e => setGridAutoRows(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="grid-gap">grid-gap</label>
+                      <input
+                        id="grid-gap"
+                        type="text"
+                        value={gridGap}
+                        onChange={ e => setGridGap(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="justify-content">justify-content</label>
+                      <select
+                        id="justify-content"
+                        onChange={ e => setJustifyContent(e.target.value)}
+                        value={justifyContent}
+                      >
+                        {
+                          [
+                            "",
+                            "center",
+                            "start",
+                            "end",
+                            "left",
+                            "right",
+                            "normal",
+                            "space-between",
+                            "space-around",
+                            "space-evenly",
+                            "stretch",
+                            "safe center",
+                            "unsafe center"
+                          ].map(val => <option key={val}>{val}</option>)
+                        }
+                      </select>
+                    </div>
+                    <div>
+                      <label htmlFor="justify-items">justify-items</label>
+                      <select
+                        id="justify-items"
+                        value={justifyItems}
+                        onChange={ e => setJustifyItems(e.target.value)}
+                      >
+                        {
+                          [
+                            "",
+                            "auto",
+                            "normal",
+                            "stretch",
+                            "center",
+                            "start",
+                            "end",
+                            "self-start",
+                            "self-end",
+                            "left",
+                            "right",
+                            "baseline",
+                            "first baseline",
+                            "last baseline",
+                            "safe center",
+                            "unsafe center"
+                          ].map(val => <option key={val}>{val}</option>)
+                        }
+                      </select>
+                    </div>
+                    <div>
+                      <label htmlFor="align-content">align-content</label>
+                      <select
+                        id="align-content"
+                        value={alignContent}
+                        onChange={ e => setAlignContent(e.target.value)}
+                      >
+                        {
+                          [
+                            "",
+                            "center",
+                            "start",
+                            "end",
+                            "normal",
+                            "baseline",
+                            "first baseline",
+                            "last baseline",
+                            "space-between",
+                            "space-around",
+                            "space-evenly",
+                            "stretch",
+                            "safe center",
+                            "unsafe center",
+                          ].map(val => <option key={val}>{val}</option>)
+                        }
+                      </select>
+                    </div>
+                    <div>
+                      <label htmlFor="align-items">align-items</label>
+                      <select
+                        id="align-items"
+                        value={alignItems}
+                        onChange={ e => setAlignItems(e.target.value)}
+                      >
+                        {
+                          [
+                            "",
+                            "normal",
+                            "stretch",
+                            "center",
+                            "start",
+                            "end",
+                            "baseline",
+                            "first baseline",
+                            "last baseline",
+                            "safe center",
+                            "unsafe center"
+                          ].map(val => <option key={val}>{val}</option>)
+                        }
+                      </select>
+                    </div>
+                  </React.Fragment>
+                }
+              </section>
+              {
+                !exporting &&
+                <div id="buttons">
+                  <button onClick={ () => setDivs([...divs, newDiv()]) }>Add Grid Item</button>
+                  <button
+                    onClick={ () => setDivs(divs.slice(0, divs.length-1)) }
+                  >
+                    Remove Grid Item
+                  </button>
+                </div>
+              }
+            </div>
+            <div
+              id="wrapper"
+              style={{
+                display: 'grid',
+                border: divs.length ? '1px dashed black' : '0',
+                width,
+                height,
+                gridTemplateAreas,
+                gridTemplateColumns,
+                gridTemplateRows,
+                gridAutoRows,
+                gridGap,
+                justifyContent,
+                justifyItems,
+                alignContent,
+                alignItems
+              }}
+            >
+              {
+                divs.map((div, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      backgroundColor: 'lightslategray',
+                      padding: '10px',
+                      display: 'grid',
+                      placeItems: 'center',
+                      gridArea: div.gridArea,
+                      justifySelf: div.justifySelf,
+                      alignSelf: div.alignSelf,
+                      width: div.width,
+                      height: div.height
+                    }}
+                  >
+                    {
+                      !exporting &&
+                      <div
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: '1fr 1fr',
+                          gridGap: '10px'
+                        }}
+                      >
+                        <div style={{ gridColumn: 'span 2' }}>
+                          <label htmlFor={`grid-area-${i}`}>grid-area</label>
+                          <input
+                            id={`grid-area-${i}`}
+                            type="text"
+                            value={div.gridArea}
+                            name="gridArea"
+                            onChange={ e => updateDiv(i, e.target.name, e.target.value) }
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor={`justify-self-${i}`}><nobr>justify-self</nobr></label>
+                          <select
+                            id={`justify-self-${i}`}
+                            value={div.justifySelf}
+                            name="justifySelf"
+                            onChange={ e => updateDiv(i, e.target.name, e.target.value) }
+                          >
+                            {
+                              [
+                                "",
+                                "auto",
+                                "normal",
+                                "stretch",
+                                "center",
+                                "start",
+                                "end",
+                                "self-start",
+                                "self-end",
+                                "left",
+                                "right",
+                                "baseline",
+                                "first baseline",
+                                "last baseline",
+                                "safe center",
+                                "unsafe center"
+                              ].map(val => <option key={val}>{val}</option>)
+                            }
+                          </select>
+                        </div>
+                        <div>
+                          <label htmlFor={`align-self-${i}`}><nobr>align-self</nobr></label>
+                          <select
+                            id={`align-self-${i}`}
+                            value={div.alignSelf}
+                            name="alignSelf"
+                            onChange={ e => updateDiv(i, e.target.name, e.target.value) }
+                          >
+                            {
+                              [
+                                "",
+                                "auto",
+                                "normal",
+                                "stretch",
+                                "center",
+                                "start",
+                                "end",
+                                "baseline",
+                                "first baseline",
+                                "last baseline",
+                                "safe center",
+                                "unsafe center"
+                              ].map(val => <option key={val}>{val}</option>)
+                            }
+                          </select>
+                        </div>
+                        <div>
+                          <label htmlFor={`width-${i}`}>width</label>
+                          <input
+                            id={`width-${i}`}
+                            type="text"
+                            value={div.width}
+                            name="width"
+                            onChange={ e => updateDiv(i, e.target.name, e.target.value) }
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor={`height-${i}`}>height</label>
+                          <input
+                            id={`height-${i}`}
+                            type="text"
+                            value={div.height}
+                            name="height"
+                            onChange={ e => updateDiv(i, e.target.name, e.target.value) }
+                          />
+                        </div>
+                      </div>
+                    }
+                  </div>
+                ))
+              }
+            </div>
+          </main>
+        )
+      }
+      ReactDOM.render(<Grid/>, document.getElementById('root'))
+    </script>
+  </body>
+</html>
